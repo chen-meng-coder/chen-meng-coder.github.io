@@ -20,7 +20,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
 
-        /* 导航栏 */
+        /* ========= 导航栏 ========= */
         nav { background-color: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
@@ -29,22 +29,32 @@
         .nav-link:hover, .nav-link.active { color: var(--primary-color); }
         .nav-link.active::after { content: ''; position: absolute; bottom: -1rem; left: 0; width: 100%; height: 3px; background-color: var(--primary-color); border-radius: 3px 3px 0 0; }
 
-        /* 头部 */
+        /* ========= 头部区 ========= */
         header { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%); margin-bottom: 2rem;}
         header h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #0f172a; }
         header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
+        /* ========= 页面容器 ========= */
         .container { max-width: 1100px; margin: 0 auto 4rem auto; padding: 0 2rem; }
         .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .section-title { font-size: 1.8rem; margin-bottom: 2rem; border-left: 4px solid var(--primary-color); padding-left: 1rem; }
         .card { background: var(--card-bg); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 2rem; }
-
-        /* ========= 新增：知识库双栏布局 ========= */
-        .knowledge-layout { display: flex; gap: 2rem; align-items: flex-start; }
         
-        /* 左侧边栏 */
+        .tag { display: inline-block; padding: 0.2rem 0.8rem; background-color: var(--primary-light); color: var(--primary-color); border-radius: 20px; font-size: 0.8rem; margin-right: 0.5rem; }
+        .tag.tech { background-color: #f1f5f9; color: #475569; border: 1px solid var(--border-color);}
+
+        /* ========= 模块1：关于我 ========= */
+        .profile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        .profile-sidebar { text-align: center; }
+        .profile-avatar { width: 120px; height: 120px; background-color: #e2e8f0; border-radius: 50%; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem; }
+        .skill-list { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.5rem;}
+        .desc-text { margin-bottom: 2rem; line-height: 1.8; color: #334155; }
+
+        /* ========= 模块2：知识库双栏布局 ========= */
+        .knowledge-layout { display: flex; gap: 2rem; align-items: flex-start; }
         .category-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 100px; padding: 1.5rem; }
         .sidebar-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 1rem; color: var(--text-main); display: flex; justify-content: space-between; align-items: center;}
         .cat-list { list-style: none; }
@@ -54,10 +64,7 @@
         .add-cat-btn { width: 100%; margin-top: 1rem; padding: 0.6rem; background: transparent; border: 1px dashed var(--border-color); color: var(--text-muted); border-radius: 8px; cursor: pointer; transition: 0.2s;}
         .add-cat-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
 
-        /* 右侧主内容区 */
         .knowledge-main { flex: 1; min-width: 0; }
-
-        /* 表单与列表样式 */
         .form-group { margin-bottom: 1.2rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
         .form-control { width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; }
@@ -73,11 +80,34 @@
         .note-title { font-size: 1.25rem; font-weight: bold; }
         .note-content { color: #334155; white-space: pre-wrap; font-size: 0.95rem; }
         .note-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; padding-top: 0.5rem; border-top: 1px dashed #e2e8f0; }
-        .tag { display: inline-block; padding: 0.2rem 0.8rem; background-color: var(--primary-light); color: var(--primary-color); border-radius: 20px; font-size: 0.8rem; margin-right: 0.5rem; }
-        .tag.tech { background-color: #f1f5f9; color: #475569; }
         .delete-btn { cursor: pointer; background: none; border: none; color: var(--text-muted); transition: color 0.2s; }
         .delete-btn:hover { color: var(--danger-color); }
 
+        /* ========= 模块3：项目展示 ========= */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+        .project-card { padding: 1.5rem; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg);}
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        .project-title { font-size: 1.25rem; font-weight: bold; margin-bottom: 0.8rem; color: var(--text-main); }
+        .tag-group { margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .project-desc { color: #475569; font-size: 0.95rem; margin-bottom: 1.5rem; flex: 1; line-height: 1.6; }
+        .project-links { margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 1rem; }
+        .project-links a { color: var(--primary-color); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+        
+        /* ========= 模块4：资源导航 ========= */
+        .resource-category { margin-bottom: 2rem; }
+        .resource-category h3 { margin-bottom: 1rem; color: #475569; font-size: 1.1rem;}
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .resource-card { padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; color: inherit; display: block; transition: border-color 0.2s; background: var(--card-bg);}
+        .resource-card:hover { border-color: var(--primary-color); background: var(--primary-light); }
+        .resource-card h4 { margin-bottom: 0.2rem; color: var(--primary-color); font-size: 1rem;}
+        .resource-card p { font-size: 0.85rem; color: var(--text-muted); }
+
+        footer { text-align: center; padding: 2rem; color: var(--text-muted); border-top: 1px solid var(--border-color); font-size: 0.9rem;}
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .knowledge-layout { flex-direction: column; }
+            .category-sidebar { width: 100%; position: static; }
+        }
     </style>
 </head>
 <body>
@@ -89,6 +119,7 @@
                 <div class="nav-link" onclick="switchTab('about')">关于我</div>
                 <div class="nav-link active" onclick="switchTab('knowledge')">知识管理</div>
                 <div class="nav-link" onclick="switchTab('projects')">成果展示</div>
+                <div class="nav-link" onclick="switchTab('resources')">资源导航</div>
             </div>
         </div>
     </nav>
@@ -101,7 +132,29 @@
     <div class="container">
         <div id="view-about" class="view-section">
             <h2 class="section-title">👨‍💻 关于我</h2>
-            <div class="card"><p>这里是简介（可参考上一个版本完善）...</p></div>
+            <div class="card profile-grid">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar">👨‍🔬</div>
+                    <h3>Chen Meng</h3>
+                    <p class="subtitle">计算机科学研究者 / 开发者</p>
+                </div>
+                <div class="profile-content">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-main);">研究方向</h3>
+                    <p class="desc-text">
+                        专注于<strong>多模态虚假新闻检测</strong>与<strong>反欺诈系统</strong>架构。致力于探索深度学习与多智能体（Multi-Agent）系统在事实核查与意图识别中的实际应用。
+                    </p>
+                    
+                    <h3 style="margin-bottom: 1rem; color: var(--text-main);">技术栈</h3>
+                    <div class="skill-list">
+                        <span class="tag tech">Python</span>
+                        <span class="tag tech">Deep Learning</span>
+                        <span class="tag tech">Multi-Agent</span>
+                        <span class="tag tech">TypeScript</span>
+                        <span class="tag tech">Vite</span>
+                        <span class="tag tech">Firebase</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="view-knowledge" class="view-section active">
@@ -127,8 +180,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>分类 (Category)</label>
-                                    <select id="noteCategory" class="form-control">
-                                        </select>
+                                    <select id="noteCategory" class="form-control"></select>
                                 </div>
                                 <div class="form-group">
                                     <label>标签 (Tags - 用逗号分隔)</label>
@@ -153,9 +205,72 @@
 
         <div id="view-projects" class="view-section">
             <h2 class="section-title">🔬 科研与工程项目</h2>
-            <div class="card"><p>项目展示区（可参考上一个版本完善）...</p></div>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3 class="project-title">多模态虚假新闻检测系统</h3>
+                    <div class="tag-group">
+                        <span class="tag tech">PyTorch</span> <span class="tag tech">Transformer</span> <span class="tag tech">MoE</span>
+                    </div>
+                    <p class="project-desc">基于混合专家网络 (MoE) 的多模态融合模型。系统通过大语言模型智能体进行感知与任务调度，结合深度学习模块对文本、图像特征进行事实核查与特征融合。</p>
+                    <div class="project-links"><a href="#">查看研究详情 &rarr;</a></div>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">Anti-Fraud Multi-Agent 平台</h3>
+                    <div class="tag-group">
+                        <span class="tag tech">LLM</span> <span class="tag tech">知识图谱</span> <span class="tag tech">Python</span>
+                    </div>
+                    <p class="project-desc">结合大模型与外部知识库（Wikidata API）的反欺诈验证平台。通过多智能体协同，实现对复杂语义的意图识别与图谱三元组抽取验证。</p>
+                    <div class="project-links"><a href="#">查看架构图 (BioRender) &rarr;</a></div>
+                </div>
+
+                <div class="project-card">
+                    <h3 class="project-title">Spam Data Center</h3>
+                    <div class="tag-group">
+                        <span class="tag tech">Vite</span> <span class="tag tech">Firebase</span> <span class="tag tech">GitHub</span>
+                    </div>
+                    <p class="project-desc">基于 Serverless 架构的前端管理平台，集成了 Google Gemini AI 接口与 Firestore 云数据库，用于垃圾信息数据的收集、存储与可视化呈现。</p>
+                    <div class="project-links"><a href="https://github.com/chen-meng-coder/spam" target="_blank">View on GitHub &rarr;</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-resources" class="view-section">
+            <h2 class="section-title">📂 专属导航站</h2>
+            <div class="card">
+                <div class="resource-category">
+                    <h3>官方文档</h3>
+                    <div class="resource-grid">
+                        <a href="https://pytorch.org/docs/" target="_blank" class="resource-card">
+                            <h4>PyTorch Docs</h4>
+                            <p>深度学习核心框架文档</p>
+                        </a>
+                        <a href="https://firebase.google.com/docs" target="_blank" class="resource-card">
+                            <h4>Firebase</h4>
+                            <p>BaaS 平台开发指南</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="resource-category">
+                    <h3>科研与绘图工具</h3>
+                    <div class="resource-grid">
+                        <a href="https://biorender.com/" target="_blank" class="resource-card">
+                            <h4>BioRender</h4>
+                            <p>专业的科学架构与流程图绘制</p>
+                        </a>
+                        <a href="https://paperswithcode.com/" target="_blank" class="resource-card">
+                            <h4>Papers with Code</h4>
+                            <p>追踪最新机器学习论文与开源代码</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2026 Chen Meng. 结构化构建个人数字大脑.</p>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -180,40 +295,31 @@
         const selectCatDropdown = document.getElementById('noteCategory');
         const currentCatTitle = document.getElementById('currentCatTitle');
 
-        let allNotesData = []; // 在前端缓存所有数据，方便极速切换分类
+        let allNotesData = []; 
 
         // ================= 分类管理系统 =================
-        // 从浏览器本地缓存读取你自定义的分类（如果没有，就用默认的）
         let myCategories = JSON.parse(localStorage.getItem('pkm_categories')) || ['技术笔记', '论文阅读', '系统架构', '开发随笔'];
         let activeCategory = '全部笔记';
 
-        // 渲染分类 UI（左侧边栏 + 右侧下拉框）
         function renderCategoryUI() {
-            // 1. 渲染左侧边栏
             sidebarCatList.innerHTML = `<li class="cat-item ${activeCategory === '全部笔记' ? 'active' : ''}" onclick="selectCategory('全部笔记')">全部笔记</li>`;
-            
-            // 2. 渲染下拉框选项
             selectCatDropdown.innerHTML = '';
 
             myCategories.forEach(cat => {
-                // 添加到左侧
                 sidebarCatList.innerHTML += `<li class="cat-item ${activeCategory === cat ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</li>`;
-                // 添加到右侧下拉框
                 selectCatDropdown.innerHTML += `<option value="${cat}">${cat}</option>`;
             });
 
-            // 联动逻辑：如果选中的不是全部，下拉框自动锁定到当前分类
             if (activeCategory !== '全部笔记') {
                 selectCatDropdown.value = activeCategory;
             }
         }
 
-        // 全局挂载方法：供 HTML 调用
         window.selectCategory = function(catName) {
             activeCategory = catName;
             currentCatTitle.innerText = catName === '全部笔记' ? '全部笔记' : `📂 ${catName}`;
-            renderCategoryUI(); // 刷新高亮状态
-            renderNotesList();  // 重新过滤并显示列表
+            renderCategoryUI(); 
+            renderNotesList();  
         }
 
         window.addNewCategory = function() {
@@ -222,9 +328,7 @@
                 const catName = newCat.trim();
                 if (!myCategories.includes(catName)) {
                     myCategories.push(catName);
-                    // 保存到本地浏览器
                     localStorage.setItem('pkm_categories', JSON.stringify(myCategories));
-                    // 自动选中新分类
                     selectCategory(catName); 
                 } else {
                     alert("这个分类已经存在啦！");
@@ -246,7 +350,7 @@
                 const q = query(collection(db, "knowledge_points"), orderBy("timestamp", "desc"));
                 const querySnapshot = await getDocs(q);
                 
-                allNotesData = []; // 清空缓存
+                allNotesData = []; 
                 querySnapshot.forEach((document) => {
                     allNotesData.push({ id: document.id, ...document.data() });
                 });
@@ -254,15 +358,13 @@
                 renderNotesList();
             } catch (error) {
                 console.error("读取错误: ", error);
-                notesList.innerHTML = '<li>数据读取失败。</li>';
+                notesList.innerHTML = '<li>数据读取失败。请检查控制台。</li>';
             }
         }
 
-        // 核心过滤与渲染逻辑（前端极速过滤，无需刷新）
         function renderNotesList() {
             notesList.innerHTML = '';
             
-            // 根据当前选中的分类进行过滤
             let displayNotes = allNotesData;
             if (activeCategory !== '全部笔记') {
                 displayNotes = allNotesData.filter(note => note.category === activeCategory);
@@ -286,7 +388,7 @@
                     <li>
                         <div class="note-title">${data.title || '无标题'}</div>
                         <div style="margin: 0.5rem 0;">
-                            <span class="tag tech" style="background:#e0e7ff; color:#3730a3;">📁 ${data.category || '未分类'}</span>
+                            <span class="tag" style="background:#e0e7ff; color:#3730a3;">📁 ${data.category || '未分类'}</span>
                             ${tagsHtml}
                         </div>
                         <div class="note-content">${data.content}</div>
@@ -298,7 +400,6 @@
             });
         }
 
-        // 写入数据库
         saveBtn.addEventListener('click', async () => {
             const titleInput = document.getElementById('noteTitle');
             const tagsInput = document.getElementById('noteTags');
@@ -313,14 +414,14 @@
                 const tagsArray = tagsInput.value.split(',').map(t => t.trim()).filter(t => t);
                 await addDoc(collection(db, "knowledge_points"), {
                     title: titleInput.value.trim(),
-                    category: selectCatDropdown.value, // 重点：读取下拉框当前的值
+                    category: selectCatDropdown.value, 
                     tags: tagsArray,
                     content: contentInput.value.trim(),
                     timestamp: Date.now() 
                 });
                 
                 titleInput.value = ''; tagsInput.value = ''; contentInput.value = ''; 
-                await fetchNotesFromDB(); // 重新拉取云端数据 
+                await fetchNotesFromDB(); 
             } catch (e) {
                 console.error("写入错误: ", e);
             } finally {
@@ -329,7 +430,6 @@
             }
         });
 
-        // 删除逻辑
         notesList.addEventListener('click', async (e) => {
             if (e.target.classList.contains('delete-btn')) {
                 if (confirm("确定删除这篇笔记吗？")) {
@@ -342,7 +442,6 @@
             }
         });
 
-        // 初始化
         renderCategoryUI();
         fetchNotesFromDB();
     </script>
