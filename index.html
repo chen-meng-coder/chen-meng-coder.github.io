@@ -1,1 +1,224 @@
-这是我的第一个静态网页页面！！！
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chen Meng - 个人主页</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        nav {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 头部欢迎区 */
+        header {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 主体内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* 资料卡片网格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            margin-top: 4rem;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* 移动端可以考虑做汉堡菜单，这里为保持简单先隐藏 */
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Chen Meng</a>
+            <div class="nav-links">
+                <a href="#about">关于我</a>
+                <a href="#materials">学习资料</a>
+                <a href="#projects">开源项目</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="about">
+        <h1>你好，我是 Chen Meng 👋</h1>
+        <p>欢迎来到我的个人主页。这是一个用于记录技术成长、分享学习资料和展示开源项目的地方。</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title" id="materials">📚 学习资料库</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>前端开发笔记</h3>
+                <p>整理了 HTML、CSS 和 JavaScript 的核心知识点，以及 Vue/React 等框架的入门教程。</p>
+                <a href="#" class="btn">查看详情</a>
+            </div>
+            <div class="card">
+                <h3>算法与数据结构</h3>
+                <p>记录了 LeetCode 刷题心得，以及常见的排序、查找算法的实现原理。</p>
+                <a href="#" class="btn">浏览笔记</a>
+            </div>
+            <div class="card">
+                <h3>好用的开发工具推荐</h3>
+                <p>分享我平时在用的 VS Code 插件、浏览器扩展以及各种提高效率的神器。</p>
+                <a href="#" class="btn">获取列表</a>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="projects">💻 开源项目</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>个人博客系统</h3>
+                <p>基于现代前端技术栈搭建的静态博客网站，支持 Markdown 写作和自动部署。</p>
+                <a href="https://github.com/chen-meng-coder" target="_blank" class="btn">查看源码</a>
+            </div>
+            <div class="card">
+                <h3>实用小工具合集</h3>
+                <p>日常编写的各类脚本和小工具，旨在解决重复性劳动，提高生活和工作效率。</p>
+                <a href="https://github.com/chen-meng-coder" target="_blank" class="btn">查看源码</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Chen Meng Coder. 基于 GitHub Pages 托管.</p>
+    </footer>
+
+</body>
+</html>
