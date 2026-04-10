@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chen Meng - 个人主页</title>
+    <title>Chen Meng - 知识管理与展示平台</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -11,195 +11,85 @@
             --text-main: #1e293b;
             --text-muted: #64748b;
             --card-bg: #ffffff;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
 
         /* 导航栏 */
-        nav {
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
+        nav { background-color: var(--card-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
+        
+        /* 按钮样式 */
+        .btn { display: inline-block; padding: 0.5rem 1.2rem; background-color: var(--primary-color); color: white; text-decoration: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; border: none; transition: background-color 0.3s; }
+        .btn:hover { background-color: #1d4ed8; }
+        .btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .btn-outline { background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
+        .btn-outline:hover { background-color: var(--primary-color); color: white; }
 
         /* 头部欢迎区 */
-        header {
-            text-align: center;
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
-        }
-
-        header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #0f172a;
-        }
-
-        header p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        header { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%); }
+        header h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #0f172a; }
+        header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
         /* 主体内容区 */
-        .container {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
+        .container { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; }
+        .section-title { font-size: 1.8rem; margin-bottom: 2rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;}
 
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        /* 按钮样式 */
-        .btn {
-            display: inline-block;
-            padding: 0.5rem 1.2rem;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #1d4ed8;
-        }
+        /* 知识点模块 */
+        .note-container { background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         
-        .btn:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
+        /* 隐藏类，用于控制权限视图 */
+        .hidden { display: none !important; }
 
-        /* 知识点记录模块样式 */
-        .note-container {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 4rem;
-        }
+        .note-input-area { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px dashed #cbd5e1; }
+        #noteInput { width: 100%; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical; font-size: 1rem; outline: none; }
+        #noteInput:focus { border-color: var(--primary-color); }
+        
+        .notes-list { list-style: none; }
+        .notes-list li { padding: 1.5rem 0; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 0.5rem; }
+        .notes-list li:last-child { border-bottom: none; }
+        
+        .note-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .note-content { flex: 1; white-space: pre-wrap; word-break: break-all; font-size: 1.05rem; }
+        .note-meta { font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;}
+        
+        /* 管理按钮：编辑与删除 */
+        .admin-actions { display: flex; gap: 10px; }
+        .icon-btn { cursor: pointer; background: none; border: none; font-size: 1.1rem; opacity: 0.6; transition: opacity 0.2s; }
+        .icon-btn:hover { opacity: 1; }
+        .edit-btn:hover { color: var(--primary-color); }
+        .delete-btn:hover { color: var(--danger-color); }
 
-        .note-input-area {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        #noteInput {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            resize: vertical;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        #noteInput:focus {
-            border-color: var(--primary-color);
-        }
-
-        .notes-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .notes-list li {
-            padding: 1.5rem 1rem;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .notes-list li:last-child {
-            border-bottom: none;
-        }
-
-        .note-content {
-            flex: 1;
-            white-space: pre-wrap; /* 保留换行 */
-            word-break: break-all;
-        }
-
-        .note-date {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            min-width: 140px;
-            text-align: right;
-            padding-top: 0.2rem;
-        }
-
-        /* 页脚 */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--card-bg);
-            color: var(--text-muted);
-            margin-top: 4rem;
-        }
+        footer { text-align: center; padding: 2rem; color: var(--text-muted); margin-top: 4rem; font-size: 0.9rem;}
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-container">
-            <a href="#" class="logo">Chen Meng</a>
+            <a href="#" class="logo">Chen Meng PKM</a>
+            <button id="authBtn" class="btn btn-outline">管理员登录</button>
         </div>
     </nav>
 
     <header>
         <h1>你好，我是 Chen Meng 👋</h1>
-        <p>欢迎来到我的个人主页。现在，这个网页拥有了一个云端大脑，可以随时记录我的技术成长。</p>
+        <p>个人知识管理系统 (PKM) ｜ 致力于多模态融合与虚假新闻检测研究</p>
     </header>
 
     <div class="container">
-        <h2 class="section-title">💡 随时记录知识点</h2>
+        <h2 class="section-title">💡 知识碎片库</h2>
         <div class="note-container">
-            <div class="note-input-area">
-                <textarea id="noteInput" rows="3" placeholder="今天学到了什么？或者有什么灵感？赶紧记下来..."></textarea>
-                <button id="saveBtn" class="btn">保存记录</button>
+            
+            <div id="editorArea" class="note-input-area hidden">
+                <textarea id="noteInput" rows="3" placeholder="今天学到了什么？支持随时修改与删除..."></textarea>
+                <button id="saveBtn" class="btn">发布知识点</button>
             </div>
+
             <ul id="notesList" class="notes-list">
                 <li>数据加载中...</li>
             </ul>
@@ -207,70 +97,123 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 Chen Meng Coder. 基于 GitHub Pages & Firebase 构建.</p>
+        <p>&copy; 2026 Chen Meng. 基于 Serverless 架构 (GitHub Pages + Firebase) 构建.</p>
     </footer>
 
     <script type="module">
-        // 1. 从 CDN 直接引入 Firebase
+        // 引入核心、数据库以及 Auth 模块
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        // 2. 你的专属 Firebase 配置
+        // 你的专属 Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyCBKq8bmQOfuGbfssXgk39Ac_9Ww6lRMmg",
             authDomain: "mypersonalsite-19d3c.firebaseapp.com",
             projectId: "mypersonalsite-19d3c",
             storageBucket: "mypersonalsite-19d3c.firebasestorage.app",
             messagingSenderId: "714590228153",
-            appId: "1:714590228153:web:f3890508dbe2e4f9f01568",
-            measurementId: "G-Z9EMJXFBJP"
+            appId: "1:714590228153:web:f3890508dbe2e4f9f01568"
         };
 
-        // 3. 初始化连接
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
-        // 4. 获取页面元素
+        // 页面元素
+        const authBtn = document.getElementById('authBtn');
+        const editorArea = document.getElementById('editorArea');
         const saveBtn = document.getElementById('saveBtn');
         const noteInput = document.getElementById('noteInput');
         const notesList = document.getElementById('notesList');
 
-        // 5. 核心功能：读取数据
+        let currentUser = null; // 记录当前登录状态
+
+        // ------------------ 身份验证模块 ------------------
+        // 监听用户登录状态变化
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                // 已登录
+                authBtn.innerText = "退出登录";
+                authBtn.classList.remove('btn-outline');
+                editorArea.classList.remove('hidden'); // 显示输入框
+            } else {
+                // 未登录
+                authBtn.innerText = "管理员登录";
+                authBtn.classList.add('btn-outline');
+                editorArea.classList.add('hidden'); // 隐藏输入框
+            }
+            loadNotes(); // 状态改变后重新加载列表（以决定是否显示垃圾桶）
+        });
+
+        // 登录/登出按钮点击事件
+        authBtn.addEventListener('click', async () => {
+            if (currentUser) {
+                await signOut(auth);
+            } else {
+                try {
+                    await signInWithPopup(auth, provider);
+                } catch (error) {
+                    console.error("登录失败:", error);
+                    alert("登录失败，请检查网络或控制台。");
+                }
+            }
+        });
+
+        // ------------------ 数据库核心操作模块 ------------------
+        
+        // 1. 读取并渲染数据
         async function loadNotes() {
             try {
-                // 查询知识点集合，按时间倒序排列
                 const q = query(collection(db, "knowledge_points"), orderBy("timestamp", "desc"));
                 const querySnapshot = await getDocs(q);
                 
                 notesList.innerHTML = ''; 
                 
                 if (querySnapshot.empty) {
-                    notesList.innerHTML = '<li>还没有记录，快写下第一条知识点吧！</li>';
+                    notesList.innerHTML = '<li>还没有记录...</li>';
                     return;
                 }
 
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                querySnapshot.forEach((document) => {
+                    const data = document.data();
+                    const docId = document.id; // 获取文档唯一 ID，用于修改和删除
                     const dateStr = data.timestamp ? new Date(data.timestamp).toLocaleString() : '刚刚';
+                    
+                    // 判断是否生成管理按钮：只有登录了才生成
+                    let adminButtons = '';
+                    if (currentUser) {
+                        adminButtons = `
+                            <div class="admin-actions">
+                                <button class="icon-btn edit-btn" data-id="${docId}" data-content="${data.content}" title="编辑">✏️</button>
+                                <button class="icon-btn delete-btn" data-id="${docId}" title="删除">🗑️</button>
+                            </div>
+                        `;
+                    }
+
                     notesList.innerHTML += `
                         <li>
-                            <div class="note-content">${data.content}</div>
-                            <div class="note-date">${dateStr}</div>
+                            <div class="note-header">
+                                <div class="note-content" id="content-${docId}">${data.content}</div>
+                            </div>
+                            <div class="note-meta">
+                                <span>📅 ${dateStr}</span>
+                                ${adminButtons}
+                            </div>
                         </li>`;
                 });
             } catch (error) {
                 console.error("读取错误: ", error);
-                notesList.innerHTML = '<li>读取失败，请检查控制台报错。如果是权限问题，请确保 Firebase 安全规则设置为测试模式。</li>';
             }
         }
 
-        // 6. 核心功能：写入数据
+        // 2. 新增数据
         saveBtn.addEventListener('click', async () => {
+            if (!currentUser) return alert("请先登录！");
             const text = noteInput.value.trim();
-            if (!text) {
-                alert('内容不能为空哦！');
-                return;
-            }
+            if (!text) return alert('内容不能为空哦！');
 
             saveBtn.innerText = '保存中...';
             saveBtn.disabled = true;
@@ -280,20 +223,55 @@
                     content: text,
                     timestamp: Date.now() 
                 });
-                
                 noteInput.value = ''; 
                 await loadNotes();    
             } catch (e) {
                 console.error("写入错误: ", e);
-                alert('保存失败，请检查控制台报错。');
             } finally {
-                saveBtn.innerText = '保存记录';
+                saveBtn.innerText = '发布知识点';
                 saveBtn.disabled = false;
             }
         });
 
-        // 7. 页面加载完毕自动拉取数据
-        loadNotes();
+        // 3. 监听列表上的点击事件（事件委托机制处理编辑和删除）
+        notesList.addEventListener('click', async (e) => {
+            // 删除逻辑
+            if (e.target.classList.contains('delete-btn')) {
+                const docId = e.target.getAttribute('data-id');
+                if (confirm("确定要删除这条知识点吗？")) {
+                    try {
+                        await deleteDoc(doc(db, "knowledge_points", docId));
+                        await loadNotes(); // 刷新列表
+                    } catch (error) {
+                        console.error("删除失败:", error);
+                        alert("删除失败！");
+                    }
+                }
+            }
+
+            // 编辑逻辑
+            if (e.target.classList.contains('edit-btn')) {
+                const docId = e.target.getAttribute('data-id');
+                const oldContent = e.target.getAttribute('data-content');
+                // 使用原生的 prompt 弹窗进行快速编辑（MVP阶段最简单有效）
+                const newContent = prompt("编辑你的知识点:", oldContent);
+                
+                if (newContent !== null && newContent.trim() !== "" && newContent !== oldContent) {
+                    try {
+                        const noteRef = doc(db, "knowledge_points", docId);
+                        await updateDoc(noteRef, {
+                            content: newContent,
+                            timestamp: Date.now() // 更新修改时间
+                        });
+                        await loadNotes(); // 刷新列表
+                    } catch (error) {
+                        console.error("更新失败:", error);
+                        alert("更新失败！");
+                    }
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
