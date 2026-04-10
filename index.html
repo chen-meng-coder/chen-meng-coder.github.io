@@ -3,61 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chen Meng - 知识管理与展示平台</title>
+    <title>Chen Meng - 个人知识管理与展示平台</title>
     <style>
         :root {
             --primary-color: #2563eb;
+            --primary-light: #eff6ff;
             --bg-color: #f8fafc;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --card-bg: #ffffff;
             --danger-color: #ef4444;
+            --border-color: #e2e8f0;
+            --radius: 12px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
 
-        /* 导航栏 */
-        nav { background-color: var(--card-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        /* 导航栏 (Tab切换) */
+        nav { background-color: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); text-decoration: none; }
         
-        /* 按钮样式 */
-        .btn { display: inline-block; padding: 0.5rem 1.2rem; background-color: var(--primary-color); color: white; border-radius: 6px; font-size: 0.9rem; cursor: pointer; border: none; transition: 0.3s; }
-        .btn:hover { background-color: #1d4ed8; }
-        .btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-link { cursor: pointer; font-weight: 500; color: var(--text-muted); transition: color 0.3s; padding: 0.5rem 0; position: relative; }
+        .nav-link:hover { color: var(--primary-color); }
+        .nav-link.active { color: var(--primary-color); }
+        .nav-link.active::after { content: ''; position: absolute; bottom: -1rem; left: 0; width: 100%; height: 3px; background-color: var(--primary-color); border-radius: 3px 3px 0 0; }
 
-        /* 头部 */
-        header { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%); }
+        /* 头部 Hero 区 */
+        header { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%); margin-bottom: 2rem;}
         header h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #0f172a; }
         header p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
-        /* 主体 */
-        .container { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; }
-        .section-title { font-size: 1.8rem; margin-bottom: 2rem; text-align: center; }
+        /* 页面容器 & 视图切换 */
+        .container { max-width: 1000px; margin: 0 auto 4rem auto; padding: 0 2rem; }
+        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 记事本区域 */
-        .note-container { background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .note-input-area { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px dashed #cbd5e1; }
-        #noteInput { width: 100%; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical; font-size: 1rem; outline: none; }
-        #noteInput:focus { border-color: var(--primary-color); }
+        .section-title { font-size: 1.8rem; margin-bottom: 2rem; border-left: 4px solid var(--primary-color); padding-left: 1rem; }
+
+        /* 卡片通用 UI (文档要求) */
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 2rem; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+
+        /* 标签 (Tags) 样式 */
+        .tag { display: inline-block; padding: 0.2rem 0.8rem; background-color: var(--primary-light); color: var(--primary-color); border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin-right: 0.5rem; margin-bottom: 0.5rem;}
+        .tag.tech { background-color: #f1f5f9; color: #475569; }
+
+        /* --- 模块1：关于我 --- */
+        .profile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        .profile-sidebar { text-align: center; }
+        .profile-avatar { width: 150px; height: 150px; background-color: #cbd5e1; border-radius: 50%; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+        .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+
+        /* --- 模块2：知识库 (增强版表单) --- */
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+        .form-control:focus { border-color: var(--primary-color); }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
         
-        /* 列表区域 */
+        .btn { padding: 0.8rem 1.5rem; background-color: var(--primary-color); color: white; border-radius: 8px; font-size: 1rem; cursor: pointer; border: none; font-weight: 500; transition: 0.3s; }
+        .btn:hover { background-color: #1d4ed8; }
+
         .notes-list { list-style: none; }
-        .notes-list li { padding: 1.5rem 0; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 0.5rem; transition: background-color 0.3s; }
-        .notes-list li:hover { background-color: #f8fafc; border-radius: 8px; padding-left: 1rem; padding-right: 1rem; margin-left: -1rem; margin-right: -1rem; }
-        .notes-list li:last-child { border-bottom: none; }
-        
-        .note-content { flex: 1; white-space: pre-wrap; word-break: break-all; font-size: 1.05rem; }
-        .note-meta { font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;}
-        
-        /* 管理按钮 */
-        .admin-actions { display: flex; gap: 15px; }
-        .action-btn { cursor: pointer; background: none; border: none; font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
-        .action-btn:hover.edit-btn { color: var(--primary-color); }
+        .notes-list li { border-bottom: 1px solid var(--border-color); padding: 1.5rem 0; display: flex; flex-direction: column; gap: 0.8rem; }
+        .note-title { font-size: 1.25rem; font-weight: bold; color: var(--text-main); }
+        .note-content { color: #334155; white-space: pre-wrap; font-size: 0.95rem; }
+        .note-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted); }
+        .action-btn { cursor: pointer; background: none; border: none; color: var(--text-muted); margin-left: 1rem; transition: color 0.2s;}
         .action-btn:hover.delete-btn { color: var(--danger-color); }
 
-        footer { text-align: center; padding: 2rem; color: var(--text-muted); margin-top: 4rem; font-size: 0.9rem;}
+        /* --- 模块3：项目展示 --- */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+        .project-card { padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
+        .project-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .project-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; flex: 1; }
+        .project-links { margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem; }
+        .project-links a { color: var(--primary-color); text-decoration: none; font-size: 0.9rem; font-weight: 500;}
+
+        /* --- 模块4：资源导航 --- */
+        .resource-category { margin-bottom: 2rem; }
+        .resource-category h3 { margin-bottom: 1rem; color: #475569; }
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .resource-card { padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; text-decoration: none; color: inherit; display: block; transition: border-color 0.2s; }
+        .resource-card:hover { border-color: var(--primary-color); background: var(--primary-light); }
+        .resource-card h4 { margin-bottom: 0.2rem; color: var(--primary-color); }
+        .resource-card p { font-size: 0.8rem; color: var(--text-muted); }
+
+        footer { text-align: center; padding: 2rem; color: var(--text-muted); margin-top: 2rem; border-top: 1px solid var(--border-color); font-size: 0.9rem;}
     </style>
 </head>
 <body>
@@ -65,38 +102,162 @@
     <nav>
         <div class="nav-container">
             <a href="#" class="logo">Chen Meng PKM</a>
+            <div class="nav-links">
+                <div class="nav-link active" onclick="switchTab('about')">关于我</div>
+                <div class="nav-link" onclick="switchTab('knowledge')">知识管理</div>
+                <div class="nav-link" onclick="switchTab('projects')">成果展示</div>
+                <div class="nav-link" onclick="switchTab('resources')">资源导航</div>
+            </div>
         </div>
     </nav>
 
     <header>
-        <h1>你好，我是 Chen Meng 👋</h1>
-        <p>个人知识管理系统 (PKM) ｜ 致力于多模态融合与虚假新闻检测研究</p>
+        <h1>构建结构化知识，探索多模态前沿</h1>
+        <p>这是一个集知识沉淀、项目展示与资源聚合于一体的个人数字花园</p>
     </header>
 
     <div class="container">
-        <h2 class="section-title">💡 知识碎片库</h2>
-        <div class="note-container">
-            <div class="note-input-area">
-                <textarea id="noteInput" rows="3" placeholder="今天学到了什么？随时记录，随时修改..."></textarea>
-                <button id="saveBtn" class="btn">发布知识点</button>
+        <div id="view-about" class="view-section active">
+            <h2 class="section-title">👨‍💻 关于我</h2>
+            <div class="card profile-grid">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar">👨‍🔬</div>
+                    <h3>Chen Meng</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">计算机科学研究者 / 开发者</p>
+                </div>
+                <div class="profile-content">
+                    <h3 style="margin-bottom: 1rem;">研究方向</h3>
+                    <p style="margin-bottom: 1.5rem;">专注于<strong>多模态虚假新闻检测</strong>与<strong>反欺诈系统</strong>架构。致力于探索深度学习与多智能体（Multi-Agent）系统在事实核查与意图识别中的实际应用。</p>
+                    
+                    <h3 style="margin-bottom: 0.5rem;">技术栈</h3>
+                    <div class="skill-list">
+                        <span class="tag tech">Python</span>
+                        <span class="tag tech">Deep Learning</span>
+                        <span class="tag tech">Multi-Agent</span>
+                        <span class="tag tech">TypeScript</span>
+                        <span class="tag tech">Vite</span>
+                        <span class="tag tech">Firebase</span>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <ul id="notesList" class="notes-list">
-                <li>数据加载中...</li>
-            </ul>
+        <div id="view-knowledge" class="view-section">
+            <h2 class="section-title">🧠 知识碎片库</h2>
+            <div class="card">
+                <div style="border-bottom: 1px dashed var(--border-color); padding-bottom: 2rem; margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label>标题 (Title)</label>
+                        <input type="text" id="noteTitle" class="form-control" placeholder="例如：XGBoost调参总结">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>分类 (Category)</label>
+                            <select id="noteCategory" class="form-control">
+                                <option value="技术笔记">技术笔记</option>
+                                <option value="论文阅读">论文阅读</option>
+                                <option value="系统架构">系统架构</option>
+                                <option value="开发随笔">开发随笔</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>标签 (Tags - 用逗号分隔)</label>
+                            <input type="text" id="noteTags" class="form-control" placeholder="例如：机器学习, 多模态">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>内容 (Content)</label>
+                        <textarea id="noteContent" class="form-control" rows="5" placeholder="记录详细内容... 支持纯文本换行展示"></textarea>
+                    </div>
+                    <button id="saveBtn" class="btn">🚀 发布知识点</button>
+                </div>
+
+                <ul id="notesList" class="notes-list">
+                    <li>数据加载中...</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="view-projects" class="view-section">
+            <h2 class="section-title">🔬 科研与工程项目</h2>
+            <div class="project-grid">
+                <div class="card project-card">
+                    <h3 class="project-title">多模态虚假新闻检测系统</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="tag">PyTorch</span> <span class="tag">Transformer</span> <span class="tag">MoE</span>
+                    </div>
+                    <p class="project-desc">基于混合专家网络 (MoE) 的多模态融合模型。系统通过大语言模型智能体进行感知与任务调度，结合深度学习模块对文本、图像特征进行事实核查与特征融合。</p>
+                    <div class="project-links">
+                        <a href="#">查看研究详情 &rarr;</a>
+                    </div>
+                </div>
+
+                <div class="card project-card">
+                    <h3 class="project-title">Anti-Fraud Multi-Agent 平台</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="tag">LLM</span> <span class="tag">知识图谱</span> <span class="tag">Python</span>
+                    </div>
+                    <p class="project-desc">结合大模型与外部知识库（Wikidata/Wikipedia API）的反欺诈验证平台。通过多智能体协同，实现对复杂语义的意图识别与图谱三元组抽取验证。</p>
+                    <div class="project-links">
+                        <a href="#">查看架构图 (BioRender) &rarr;</a>
+                    </div>
+                </div>
+
+                <div class="card project-card">
+                    <h3 class="project-title">Spam Data Center</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <span class="tag">Vite</span> <span class="tag">Firebase</span> <span class="tag">GitHub</span>
+                    </div>
+                    <p class="project-desc">基于 Serverless 架构的前端管理平台，集成了 Google Gemini AI 接口与 Firestore 云数据库，用于垃圾信息数据的收集、存储与前端可视化呈现。</p>
+                    <div class="project-links">
+                        <a href="https://github.com/chen-meng-coder/spam" target="_blank">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-resources" class="view-section">
+            <h2 class="section-title">📂 专属导航站</h2>
+            <div class="card">
+                <div class="resource-category">
+                    <h3>官方文档</h3>
+                    <div class="resource-grid">
+                        <a href="https://pytorch.org/docs/" target="_blank" class="resource-card">
+                            <h4>PyTorch Docs</h4>
+                            <p>深度学习核心框架文档</p>
+                        </a>
+                        <a href="https://firebase.google.com/docs" target="_blank" class="resource-card">
+                            <h4>Firebase</h4>
+                            <p>BaaS 平台开发指南</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="resource-category">
+                    <h3>科研与绘图工具</h3>
+                    <div class="resource-grid">
+                        <a href="https://biorender.com/" target="_blank" class="resource-card">
+                            <h4>BioRender</h4>
+                            <p>专业的科学架构与流程图绘制</p>
+                        </a>
+                        <a href="https://paperswithcode.com/" target="_blank" class="resource-card">
+                            <h4>Papers with Code</h4>
+                            <p>追踪最新机器学习论文与开源代码</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Chen Meng. 基于 Serverless 架构 (GitHub Pages + Firebase) 构建.</p>
+        <p>&copy; 2026 Chen Meng. 结构化构建个人数字大脑.</p>
     </footer>
 
     <script type="module">
-        // 1. 引入核心与数据库模块 (去掉了Auth)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 2. 你的专属配置
+        // Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyCBKq8bmQOfuGbfssXgk39Ac_9Ww6lRMmg",
             authDomain: "mypersonalsite-19d3c.firebaseapp.com",
@@ -109,20 +270,32 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // UI 元素
         const saveBtn = document.getElementById('saveBtn');
-        const noteInput = document.getElementById('noteInput');
+        const titleInput = document.getElementById('noteTitle');
+        const categorySelect = document.getElementById('noteCategory');
+        const tagsInput = document.getElementById('noteTags');
+        const contentInput = document.getElementById('noteContent');
         const notesList = document.getElementById('notesList');
 
-        // 核心：读取并渲染数据
+        // Tab 切换逻辑 (暴露给全局作用域)
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('view-' + tabId).classList.add('active');
+            event.target.classList.add('active');
+        };
+
+        // 读取数据库：结构化渲染
         async function loadNotes() {
             try {
                 const q = query(collection(db, "knowledge_points"), orderBy("timestamp", "desc"));
                 const querySnapshot = await getDocs(q);
                 
                 notesList.innerHTML = ''; 
-                
                 if (querySnapshot.empty) {
-                    notesList.innerHTML = '<li>还没有记录，快写下第一条知识点吧！</li>';
+                    notesList.innerHTML = '<li style="color: #64748b;">暂无知识记录，开始你的第一次创作吧。</li>';
                     return;
                 }
 
@@ -131,15 +304,25 @@
                     const docId = document.id; 
                     const dateStr = data.timestamp ? new Date(data.timestamp).toLocaleString() : '刚刚';
                     
+                    // 生成标签 HTML
+                    let tagsHtml = '';
+                    if (data.tags && Array.isArray(data.tags)) {
+                        data.tags.forEach(tag => {
+                            if(tag.trim()) tagsHtml += `<span class="tag">${tag}</span>`;
+                        });
+                    }
+
                     notesList.innerHTML += `
                         <li>
+                            <div class="note-title">${data.title || '无标题'}</div>
+                            <div style="margin: 0.5rem 0;">
+                                <span class="tag tech" style="background:#e0e7ff; color:#3730a3;">📁 ${data.category || '未分类'}</span>
+                                ${tagsHtml}
+                            </div>
                             <div class="note-content">${data.content}</div>
-                            <div class="note-meta">
-                                <span>📅 ${dateStr}</span>
-                                <div class="admin-actions">
-                                    <button class="action-btn edit-btn" data-id="${docId}" data-content="${data.content}">✏️ 编辑</button>
-                                    <button class="action-btn delete-btn" data-id="${docId}">🗑️ 删除</button>
-                                </div>
+                            <div class="note-meta" style="margin-top: 1rem; border-top: 1px dashed #e2e8f0; padding-top: 0.5rem;">
+                                <span>📅 创建于: ${dateStr}</span>
+                                <button class="action-btn delete-btn" data-id="${docId}">🗑️ 删除</button>
                             </div>
                         </li>`;
                 });
@@ -148,77 +331,60 @@
             }
         }
 
-        // 核心：新增数据
+        // 写入数据库：结构化数据
         saveBtn.addEventListener('click', async () => {
-            const text = noteInput.value.trim();
-            if (!text) return alert('内容不能为空哦！');
+            if (!titleInput.value.trim() || !contentInput.value.trim()) {
+                return alert('标题和内容不能为空！');
+            }
 
             saveBtn.innerText = '保存中...';
             saveBtn.disabled = true;
 
             try {
+                // 处理标签：按逗号分隔，去除空格，过滤空值
+                const tagsArray = tagsInput.value.split(',').map(t => t.trim()).filter(t => t);
+
+                // 按照文档设计的数据结构写入 Firestore
                 await addDoc(collection(db, "knowledge_points"), {
-                    content: text,
+                    title: titleInput.value.trim(),
+                    category: categorySelect.value,
+                    tags: tagsArray,
+                    content: contentInput.value.trim(),
+                    status: "published",
                     timestamp: Date.now() 
                 });
-                noteInput.value = ''; 
+                
+                // 清空表单
+                titleInput.value = '';
+                tagsInput.value = '';
+                contentInput.value = ''; 
+                
                 await loadNotes();    
             } catch (e) {
                 console.error("写入错误: ", e);
-                alert("保存失败，请检查控制台。")
+                alert("保存失败");
             } finally {
-                saveBtn.innerText = '发布知识点';
+                saveBtn.innerText = '🚀 发布知识点';
                 saveBtn.disabled = false;
             }
         });
 
-        // 核心：事件委托机制处理编辑和删除
+        // 删除逻辑
         notesList.addEventListener('click', async (e) => {
-            // 点击了删除按钮
-            if (e.target.closest('.delete-btn')) {
-                const btn = e.target.closest('.delete-btn');
-                const docId = btn.getAttribute('data-id');
-                
-                if (confirm("确定要删除这条知识点吗？删了就找不回了哦！")) {
-                    btn.innerText = "删除中...";
+            if (e.target.classList.contains('delete-btn')) {
+                const docId = e.target.getAttribute('data-id');
+                if (confirm("确定删除这篇笔记吗？")) {
                     try {
                         await deleteDoc(doc(db, "knowledge_points", docId));
                         await loadNotes(); 
                     } catch (error) {
-                        console.error("删除失败:", error);
-                        alert("删除失败！");
-                    }
-                }
-            }
-
-            // 点击了编辑按钮
-            if (e.target.closest('.edit-btn')) {
-                const btn = e.target.closest('.edit-btn');
-                const docId = btn.getAttribute('data-id');
-                const oldContent = btn.getAttribute('data-content');
-                
-                // 弹窗让你修改内容
-                const newContent = prompt("重新编辑你的知识点：", oldContent);
-                
-                // 只有当内容发生改变且不为空时才更新数据库
-                if (newContent !== null && newContent.trim() !== "" && newContent !== oldContent) {
-                    btn.innerText = "更新中...";
-                    try {
-                        const noteRef = doc(db, "knowledge_points", docId);
-                        await updateDoc(noteRef, {
-                            content: newContent,
-                            timestamp: Date.now() 
-                        });
-                        await loadNotes(); 
-                    } catch (error) {
-                        console.error("更新失败:", error);
-                        alert("更新失败！");
+                        alert("删除失败");
                     }
                 }
             }
         });
 
-        // 页面加载完毕自动拉取数据
+        // 初始化加载
         loadNotes();
     </script>
 </body>
