@@ -82,6 +82,8 @@
         .note-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; padding-top: 0.5rem; border-top: 1px dashed #e2e8f0; }
         .delete-btn { cursor: pointer; background: none; border: none; color: var(--text-muted); transition: color 0.2s; }
         .delete-btn:hover { color: var(--danger-color); }
+        .edit-btn { cursor: pointer; background: none; border: none; color: var(--text-muted); transition: color 0.2s; }
+        .edit-btn:hover { color: var(--primary-color); }
 
         /* ========= 模块3：项目展示 ========= */
         .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
@@ -191,7 +193,10 @@
                                 <label>内容 (Content)</label>
                                 <textarea id="noteContent" class="form-control" rows="5" placeholder="记录详细内容... 支持纯文本换行"></textarea>
                             </div>
-                            <button id="saveBtn" class="btn">🚀 发布到当前分类</button>
+                            <div style="display: flex; gap: 1rem;">
+                                <button id="saveBtn" class="btn">🚀 发布到当前分类</button>
+                                <button id="cancelEditBtn" class="btn" style="display: none; background-color: var(--text-muted);">取消编辑</button>
+                            </div>
                         </div>
 
                         <h3 id="currentCatTitle" style="margin-bottom: 1rem; color: var(--primary-color);">全部笔记</h3>
@@ -274,7 +279,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCBKq8bmQOfuGbfssXgk39Ac_9Ww6lRMmg",
@@ -295,7 +300,8 @@
         const selectCatDropdown = document.getElementById('noteCategory');
         const currentCatTitle = document.getElementById('currentCatTitle');
 
-        let allNotesData = []; 
+        let allNotesData = [];
+        let editingDocId = null; // 当前正在编辑的文档 ID
 
         // ================= 分类管理系统 =================
         let myCategories = JSON.parse(localStorage.getItem('pkm_categories')) || ['技术笔记', '论文阅读', '系统架构', '开发随笔'];
@@ -342,6 +348,44 @@
             document.getElementById('view-' + tabId).classList.add('active');
             event.target.classList.add('active');
         };
+
+        // ================= 编辑模式 =================
+        window.editNote = function(docId) {
+            const note = allNotesData.find(n => n.id === docId);
+            if (!note) return;
+
+            editingDocId = docId;
+            document.getElementById('noteTitle').value = note.title || '';
+            document.getElementById('noteTags').value = (note.tags && Array.isArray(note.tags)) ? note.tags.join(', ') : '';
+            document.getElementById('noteContent').value = note.content || '';
+
+            // 确保分类在下拉框中，并选中
+            if (note.category && !myCategories.includes(note.category)) {
+                myCategories.push(note.category);
+                localStorage.setItem('pkm_categories', JSON.stringify(myCategories));
+                renderCategoryUI();
+            }
+            selectCatDropdown.value = note.category || myCategories[0];
+
+            // 切换按钮状态
+            saveBtn.innerText = '💾 保存修改';
+            document.getElementById('cancelEditBtn').style.display = 'inline-block';
+
+            // 滚动到表单
+            document.querySelector('.knowledge-main .card').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.cancelEdit = function() {
+            editingDocId = null;
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteTags').value = '';
+            document.getElementById('noteContent').value = '';
+            saveBtn.innerText = '🚀 发布到当前分类';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+        };
+
+        // ================= 取消编辑按钮 =================
+        document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
 
         // ================= 数据读写核心 =================
         async function fetchNotesFromDB() {
@@ -394,7 +438,10 @@
                         <div class="note-content">${data.content}</div>
                         <div class="note-meta">
                             <span>📅 创建于: ${dateStr}</span>
-                            <button class="delete-btn" data-id="${data.id}">🗑️ 删除</button>
+                            <span>
+                                <button class="edit-btn" data-id="${data.id}">✏️ 编辑</button>
+                                <button class="delete-btn" data-id="${data.id}">🗑️ 删除</button>
+                            </span>
                         </div>
                     </li>`;
             });
@@ -412,20 +459,29 @@
 
             try {
                 const tagsArray = tagsInput.value.split(',').map(t => t.trim()).filter(t => t);
-                await addDoc(collection(db, "knowledge_points"), {
+                const noteData = {
                     title: titleInput.value.trim(),
-                    category: selectCatDropdown.value, 
+                    category: selectCatDropdown.value,
                     tags: tagsArray,
                     content: contentInput.value.trim(),
-                    timestamp: Date.now() 
-                });
-                
-                titleInput.value = ''; tagsInput.value = ''; contentInput.value = ''; 
-                await fetchNotesFromDB(); 
+                    timestamp: Date.now()
+                };
+
+                if (editingDocId) {
+                    // 编辑模式：更新已有文档
+                    await updateDoc(doc(db, "knowledge_points", editingDocId), noteData);
+                    cancelEdit(); // 退出编辑模式
+                } else {
+                    // 新建模式：添加新文档
+                    await addDoc(collection(db, "knowledge_points"), noteData);
+                    titleInput.value = ''; tagsInput.value = ''; contentInput.value = '';
+                }
+
+                await fetchNotesFromDB();
             } catch (e) {
                 console.error("写入错误: ", e);
             } finally {
-                saveBtn.innerText = '🚀 发布到当前分类';
+                saveBtn.innerText = editingDocId ? '💾 保存修改' : '🚀 发布到当前分类';
                 saveBtn.disabled = false;
             }
         });
@@ -436,9 +492,12 @@
                     const docId = e.target.getAttribute('data-id');
                     try {
                         await deleteDoc(doc(db, "knowledge_points", docId));
-                        await fetchNotesFromDB(); 
+                        await fetchNotesFromDB();
                     } catch (error) { alert("删除失败"); }
                 }
+            } else if (e.target.classList.contains('edit-btn')) {
+                const docId = e.target.getAttribute('data-id');
+                editNote(docId);
             }
         });
 
